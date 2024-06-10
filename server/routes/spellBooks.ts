@@ -24,6 +24,23 @@ export const spellBooksRouter = router({
         },
       })
     }),
+  getSpellbookbyId: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .query(async (opts) => {
+      const { input } = opts
+      return await prisma?.spellbook.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          spells: true,
+        },
+      })
+    }),
   delete: publicProcedure
     .input(
       z.object({

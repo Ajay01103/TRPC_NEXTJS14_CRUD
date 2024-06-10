@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { trpc } from "@/server/client"
+import Link from "next/link"
 
 export function SpellBookCard() {
   const spellbooks = trpc.spellBooks.get.useQuery()
@@ -47,7 +48,9 @@ export function SpellBookCard() {
           className="w-[358px]"
         >
           <CardHeader>
-            <CardTitle>{spellbook.title}</CardTitle>
+            <CardTitle>
+              <Link href={`/spellbook/${spellbook.id}`}>{spellbook.title}</Link>
+            </CardTitle>
             <CardDescription>{spellbook.description}</CardDescription>
           </CardHeader>
           <CardContent>

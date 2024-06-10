@@ -52,9 +52,9 @@ const SpellCreator = () => {
         </DialogTrigger>
         <DialogContent className="sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle>Create Spell</DialogTitle>
+            <DialogTitle>Create Spellbook</DialogTitle>
             <DialogDescription>
-              Create your own Spell recipie here. Click save when you're done.
+              Create your own Spellbook recipie here. Click save when you're done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">

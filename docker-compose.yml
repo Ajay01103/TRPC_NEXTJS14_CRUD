@@ -1,17 +1,18 @@
 version: "3.8"
 
 services:
-  db:
-    container_name: trpc_test
-    image: postgres
+  mariadb:
+    image: mariadb:latest
     restart: always
-    ports:
-      - 2010:5432
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: examplepassword
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepassword
     volumes:
-      - db_trpc_test:/var/lib/postgresql/data
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
 volumes:
-  db_trpc_test:
+  mariadb_data:
