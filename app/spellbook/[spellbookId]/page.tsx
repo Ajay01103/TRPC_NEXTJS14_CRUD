@@ -22,12 +22,21 @@ import {
 } from "@/components/ui/table"
 import { trpc } from "@/server/client"
 import Image from "next/image"
-import React from "react"
+import React, { useRef, useState } from "react"
 
 const SpellBookPage = ({ params }: { params: { spellbookId: number } }) => {
+  const [title, setTitle] = useState<string>("")
+  const [description, setDescription] = useState<string>("")
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
   const spellbook = trpc.spellBooks.getSpellbookbyId.useQuery({
     id: +params.spellbookId,
   })
+
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const createSpell = trpc.spells.create.useMutation()
+
   return (
     <div className="mt-10 m-4 flex flex-col items-center justify-between gap-y-10">
       <Dialog>
@@ -47,10 +56,25 @@ const SpellBookPage = ({ params }: { params: { spellbookId: number } }) => {
           </DialogHeader>
 
           <div className="flex flex-col gap-y-8">
-            <Input placeholder="create spell" />
-            <Input placeholder="description" />
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Spell title"
+            />
+            <Input
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
+              placeholder="description"
+            />
+            <Input
+              className="h-[4rem] bg-slate-200"
+              ref={fileRef}
+              type="file"
+              placeholder="Upload image"
+            />
 
             <Button
+              // onClick={() => createSpell}
               variant="default"
               size="default"
             >
@@ -93,12 +117,12 @@ const SpellBookPage = ({ params }: { params: { spellbookId: number } }) => {
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
+        {/* <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>Total</TableCell>
             <TableCell className="text-right">$2,500.00</TableCell>
           </TableRow>
-        </TableFooter>
+        </TableFooter> */}
       </Table>
     </div>
   )
