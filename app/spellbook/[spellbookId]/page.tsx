@@ -30,12 +30,35 @@ const SpellBookPage = ({ params }: { params: { spellbookId: number } }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const spellbook = trpc.spellBooks.getSpellbookbyId.useQuery({
-    id: +params.spellbookId,
+    id: params.spellbookId ?? 0,
   })
 
   const fileRef = useRef<HTMLInputElement>(null)
 
   const createSpell = trpc.spells.create.useMutation()
+
+  const addSpell = () => {
+    if (fileRef.current?.files) {
+      const formData = new FormData()
+      const file = fileRef.current.files[0]
+      formData.append("files", file)
+      const request = { method: "POST", body: formData }
+      fetch("/api/file", request)
+      createSpell.mutate(
+        {
+          title,
+          description,
+          spellbookId: params.spellbookId,
+          image: `/${file.name}`,
+        },
+        {
+          onSuccess: () => spellbook.refetch(),
+        }
+      )
+      setTitle("")
+      setDescription("")
+    }
+  }
 
   return (
     <div className="mt-10 m-4 flex flex-col items-center justify-between gap-y-10">
@@ -74,7 +97,7 @@ const SpellBookPage = ({ params }: { params: { spellbookId: number } }) => {
             />
 
             <Button
-              // onClick={() => createSpell}
+              onClick={addSpell}
               variant="default"
               size="default"
             >
@@ -94,7 +117,7 @@ const SpellBookPage = ({ params }: { params: { spellbookId: number } }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {spellbook.data?.spells.map((spell) => (
+          {spellbook.data?.spells.map((spell: any) => (
             <TableRow key={spell.id}>
               <TableCell className="font-medium">{spell.title}</TableCell>
               <TableCell>{spell.description}</TableCell>

@@ -1,12 +1,11 @@
-import { db } from "@/utils/db"
-import { publicProcedure, router } from "../trpc"
 import { z } from "zod"
+import { publicProcedure, router } from "../trpc"
+
+import { db } from "@/utils/db"
 
 export const spellsRouter = router({
   get: publicProcedure.query(async () => {
-    const spells = await db.spell.findMany()
-
-    return spells
+    return db.spell.findMany()
   }),
   create: publicProcedure
     .input(
